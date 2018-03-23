@@ -1,0 +1,4 @@
+Manifest-version: 1.0
+Created-By: Alberto
+Build-Jdk: 1.0
+Main-Class: com.liferay.doc.alberto.analyzer.Main
