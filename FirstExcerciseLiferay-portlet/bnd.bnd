@@ -1,0 +1,4 @@
+Bundle-Name: FirstExcerciseLiferay-portlet
+Bundle-SymbolicName: com.liferay.doc.alberto.portlet
+Bundle-Version: 1.0.0
+Export-Package: com.liferay.doc.alberto.portlet.constants
