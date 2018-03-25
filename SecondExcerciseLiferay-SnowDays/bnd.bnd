@@ -1,0 +1,10 @@
+Bundle-Name: SecondExcerciseLiferay-SnowDays
+Bundle-SymbolicName: com.liferay.docs.alberto.portlet
+Bundle-Version: 1.0.0
+Export-Package: com.liferay.docs.alberto.constants
+Import-Package:\
+	javax.net.ssl,\
+	\
+	*
+Liferay-Releng-Module-Group-Description:
+Liferay-Releng-Module-Group-Title:

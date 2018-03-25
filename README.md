@@ -49,3 +49,22 @@ Write	a	Java	application	that	is	able	to	print	out	the	receipt	details	for these
 • 1 imported box of chocolates: 11.85
 • Sales Taxes: 6.70
 • Total: 74.68
+
+
+# Liferay	development	exercise	
+## INTRODUCTION
+The	goal	of	this	exercise	is	to	solve	a	development	challenge	and	provide an	artifact(s)	that	can	be	deployed	to	a	running	Liferay	Portal.	
+Please	read	the	exercise	description	carefully,	design	the	best	solution	for the	described	requirements	and	implement	it.	
+Before	the	provided	deadline	you	must	provide	build	scripts	+	source code	+	version	that	I	can	run	without	building,	including	short	installation instructions.	
+Feel	free	to	adapt	the	requirements	if	you	think	it	is	necessary	to	achieve a	better	result.	If	you	do	so,	you	need	to	provide	an	explanation	that justifies	such	changes.
+
+## EXERCISE DESCRIPTION
+A	Finnish	company	named	Suomi	Software	Services	provides	Software Consulting	Services	to	different	companies	and	have	built	a	portal	based on	Liferay	Portal	DXP	to	support	its	business.	
+In	order	to	have	a	customized	experience	with	its	customers,	Suomi Software	Services	wants	to	have	one	organization	and	web	site	per customer.	The	Portal	Administrator	of	Suomi	Software	Services	will create	one	organization	for	each	of	their	customers,	and	he	will	assign one	Registration	Code	per	organization.	
+The	employees	of	each	customer	are	assumed	to	know	the	Registration	
+Code	of	their	company.		
+The	employees	will	need	to	fill	the	Registration	Code	in	the	form	when creating	an	account.	
+If	the	Registration	Code	doesn't	match	any	of	the	companies	registered	in Suomi	Software	Services	portal,	the	account	won't	be	created	and	an error	notifying	that	the	Code	is	not	valid	will	be	displayed.	
+If	the	Registration	Code	matches	one	of	the	companies,	the	account	will be	created	and	the	employee	will	be	automatically	assigned	to	the respective	organization.	
+This	solution	must	be	implemented	as	a	Liferay	extension	and	the	end result	must	be	a	files	that	can	be	deployed	to	a	running	Liferay	DXP installation.	
+The	figure	right	is showing	how	an example	of	how	the UI	could	look.
