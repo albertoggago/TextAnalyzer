@@ -3,9 +3,12 @@ package com.liferay.docs.alberto.portlet;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +25,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.model.User;
 
 @Component(
 		property = {
@@ -65,13 +69,14 @@ public class SpecificCreateAccountMVCActionCommand extends BaseMVCActionCommand 
 		String emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
 		_log.debug("registrationCode:" +registrationCode);
 		
+		String organization = "";
+		
 		if (registrationCode.equals("")) {
 			SessionErrors.add(actionRequest, "registrationCodeVoid");
 		} else if (registrationCodeOrganization.containsKey(registrationCode)) {
 			_log.debug("oganization:" +registrationCodeOrganization.get(registrationCode));
-			prefs.setValue("organizationForRC", 
-					registrationCodeOrganization.get(registrationCode));
-			prefs.store();
+			organization = registrationCodeOrganization.get(registrationCode);
+			
 		} else {
 			_log.warn("registration code not fix ");
 			SessionErrors.add(actionRequest, "registrationCodeError");
@@ -79,10 +84,47 @@ public class SpecificCreateAccountMVCActionCommand extends BaseMVCActionCommand 
 			prefs.store();
 			throw new PortalException();
 		}
-		prefs.setValue("emailAddressForRC",emailAddress);
-		prefs.store();
 
 		mvcActionCommand.processAction(actionRequest, actionResponse);
+		
+		_log.debug("AGG LoginMVCRender");
+		
+		//parameters for update user
+		_log.debug("emailAddress: "+emailAddress);
+		_log.debug("organization: "+organization);
+		
+		
+		if (!"".equals(organization) && !"".equals(emailAddress))
+		{
+			//Get company
+			ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
+			long companyId = themeDisplay.getCompanyId();
+			_log.debug("companyId: "+companyId);
+			
+			//get user
+			_log.debug("get user");
+			try {
+				User user = UserLocalServiceUtil.getUserByEmailAddress(
+						themeDisplay.getCompanyId(), emailAddress);
+				long userId = user.getUserId();
+				_log.debug("User id: "+userId);
+				
+				//get organization
+				long organizationId = 
+					OrganizationLocalServiceUtil.getOrganizationId(companyId, organization);
+				_log.debug("Organization id: "+organizationId);
+				
+				// add to organization
+				UserLocalServiceUtil.addOrganizationUser(organizationId, userId);
+				
+			} catch (PortalException e) {
+				_log.warn(e.getMessage());
+				//SessionErrors.add(actionRequest, "registrationCodeGeneral");
+			}
+		} 
+
+		
 	}
 
     @Reference(
