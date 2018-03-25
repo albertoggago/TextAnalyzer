@@ -39,12 +39,12 @@ import com.liferay.portal.kernel.model.User;
 
 public class SpecificCreateAccountMVCActionCommand extends BaseMVCActionCommand {
 
-	private static Log _log = LogFactoryUtil.getLog(SpecificCreateAccountMVCActionCommand.class);
+	private static Log log = LogFactoryUtil.getLog(SpecificCreateAccountMVCActionCommand.class);
 	
 	@Override
 	protected void doProcessAction(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 
-		_log.debug("AGG CreateAccountMVCAction");
+		log.debug("AGG CreateAccountMVCAction");
 
 		// table of registrationCode Organization
 		List<Organization> organizations = OrganizationLocalServiceUtil
@@ -67,18 +67,18 @@ public class SpecificCreateAccountMVCActionCommand extends BaseMVCActionCommand 
 		//get information for review Registration Code
 		String registrationCode = ParamUtil.getString(actionRequest, "registrationcode");
 		String emailAddress = ParamUtil.getString(actionRequest, "emailAddress");
-		_log.debug("registrationCode:" +registrationCode);
+		log.debug("registrationCode:" +registrationCode);
 		
 		String organization = "";
 		
 		if (registrationCode.equals("")) {
 			SessionErrors.add(actionRequest, "registrationCodeVoid");
 		} else if (registrationCodeOrganization.containsKey(registrationCode)) {
-			_log.debug("oganization:" +registrationCodeOrganization.get(registrationCode));
+			log.debug("oganization:" +registrationCodeOrganization.get(registrationCode));
 			organization = registrationCodeOrganization.get(registrationCode);
 			
 		} else {
-			_log.warn("registration code not fix ");
+			log.warn("registration code not fix ");
 			SessionErrors.add(actionRequest, "registrationCodeError");
 			prefs.setValue("errorForRC","Yes");
 			prefs.store();
@@ -87,11 +87,11 @@ public class SpecificCreateAccountMVCActionCommand extends BaseMVCActionCommand 
 
 		mvcActionCommand.processAction(actionRequest, actionResponse);
 		
-		_log.debug("AGG LoginMVCRender");
+		log.debug("AGG LoginMVCRender");
 		
 		//parameters for update user
-		_log.debug("emailAddress: "+emailAddress);
-		_log.debug("organization: "+organization);
+		log.debug("emailAddress: "+emailAddress);
+		log.debug("organization: "+organization);
 		
 		
 		if (!"".equals(organization) && !"".equals(emailAddress))
@@ -100,27 +100,26 @@ public class SpecificCreateAccountMVCActionCommand extends BaseMVCActionCommand 
 			ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 					WebKeys.THEME_DISPLAY);
 			long companyId = themeDisplay.getCompanyId();
-			_log.debug("companyId: "+companyId);
+			log.debug("companyId: "+companyId);
 			
 			//get user
-			_log.debug("get user");
+			log.debug("get user");
 			try {
 				User user = UserLocalServiceUtil.getUserByEmailAddress(
 						themeDisplay.getCompanyId(), emailAddress);
 				long userId = user.getUserId();
-				_log.debug("User id: "+userId);
+				log.debug("User id: "+userId);
 				
 				//get organization
 				long organizationId = 
 					OrganizationLocalServiceUtil.getOrganizationId(companyId, organization);
-				_log.debug("Organization id: "+organizationId);
+				log.debug("Organization id: "+organizationId);
 				
 				// add to organization
 				UserLocalServiceUtil.addOrganizationUser(organizationId, userId);
 				
 			} catch (PortalException e) {
-				_log.warn(e.getMessage());
-				//SessionErrors.add(actionRequest, "registrationCodeGeneral");
+				log.warn(e.getMessage());
 			}
 		} 
 
